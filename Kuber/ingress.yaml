@@ -4,6 +4,7 @@ metadata:
   name: ingress-service
   annotations:
     kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/use-regex: "true"
 spec:
   rules:
   - host: localhost
@@ -23,15 +24,15 @@ spec:
                 name: query-srv
                 port:
                   number: 4002
-          - path: /posts/(.*)/comments
+          - path: /posts/?(.*)/comments
             pathType: ImplementationSpecific
             backend:
               service:
                 name: comments-srv
                 port:
                   number: 4001
-          - path: /
-            pathType: Prefix
+          - path: /?(.*)
+            pathType: ImplementationSpecific
             backend:
               service:
                 name: client-srv
